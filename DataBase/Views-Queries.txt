@@ -1,0 +1,96 @@
+Views:
+***************
+CREATE VIEW ListaRCL AS
+SELECT
+    R.nome AS nome_prisioneiro,
+    CASE
+        WHEN MAX(C.Crime_violento * 1) = 1 THEN 'Violento'
+        ELSE 'Não Violento'
+    END AS status_violento,
+    CR.id_cela,
+    CE.localização AS bloco_cela
+FROM
+    Recluso R
+JOIN
+    Cela_recluso CR ON R.id_recluso = CR.id_recluso
+JOIN
+    Cela CE ON CR.id_cela = CE.id_cela
+LEFT JOIN
+    Crime_recluso CRC ON R.id_recluso = CRC.id_recluso
+LEFT JOIN
+    Crime C ON CRC.id_crime = C.id_crime
+GROUP BY
+    R.id_recluso, R.nome, CR.id_cela, CE.localização
+**************** Reclusos, cela, nivel de violencia**************
+
+
+***************************
+CREATE VIEW HistoricoDeTodasConsultas AS
+SELECT
+	R.id_recluso,
+    R.nome AS nome_recluso,
+    VM.id_visita_medica,
+    VM.data_consulta,
+    CONVERT(VARCHAR(5), VM.hora_consulta, 108) AS hora_consulta_formatada,
+    VM.motivo,
+    VM.diagnostico,
+    VM.prescrição
+FROM
+    Visita_medica VM
+JOIN
+    Recluso R ON VM.id_recluso = R.id_recluso
+*************************** Historico De Todas as Consultas **************************
+
+
+
+Queries:
+
+******************
+    SELECT
+        R.nome AS nome_prisioneiro,
+        CASE
+            WHEN MAX(C.Crime_violento * 1) = 1 THEN 'Violento'
+            ELSE 'Não Violento'
+        END AS status_violento,
+        CR.id_cela,
+        CE.localização AS bloco_cela
+    FROM
+        Recluso R
+    JOIN
+        Cela_recluso CR ON R.id_recluso = CR.id_recluso
+    JOIN
+        Cela CE ON CR.id_cela = CE.id_cela
+    LEFT JOIN
+        Crime_recluso CRC ON R.id_recluso = CRC.id_recluso
+    LEFT JOIN
+        Crime C ON CRC.id_crime = C.id_crime
+    GROUP BY
+        R.id_recluso, R.nome, CR.id_cela, CE.localização
+    ORDER BY
+        status_violento,
+        CR.id_cela
+);****************** Lista os reclusos, se são violentos (cometeram pelo menos um crime violento) e as suas respetivas celas.***************
+
+
+
+
+******************************
+
+SELECT
+	R.id_recluso,
+    R.nome AS nome_recluso,
+    VM.id_visita_medica,
+    VM.data_consulta,
+    CONVERT(VARCHAR(5), VM.hora_consulta, 108) AS hora_consulta_formatada,
+    VM.motivo,
+    VM.diagnostico,
+    VM.prescrição
+FROM
+    Visita_medica VM
+JOIN
+    Recluso R ON VM.id_recluso = R.id_recluso
+ORDER BY
+    VM.data_consulta DESC, VM.hora_consulta DESC;
+
+
+********************  histórico de todas as visitas médicas********************

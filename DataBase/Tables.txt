@@ -1,0 +1,135 @@
+CREATE DATABASE Prisao_ISPGAYA16
+
+CREATE TABLE Morada (
+
+    codigo_postal INT NOT NULL,
+    apartado VARCHAR(50) NOT NULL,
+    Cidade VARCHAR(15) NOT NULL,
+    PRIMARY KEY (codigo_postal)
+
+);
+
+CREATE TABLE Atividade (
+
+    id_atividade INT NOT NULL IDENTITY(1,1),
+    nome VARCHAR (100) NOT NULL,
+    descriçao VARCHAR (200) NOT NULL,
+    hora_atividade TIME NOT NULL,
+    docente VARCHAR (100) NOT NULL,
+    data_atividade DATE NOT NULL,
+    PRIMARY KEY (id_atividade)
+);
+
+CREATE TABLE Programa_de_reabilitaçao (
+
+    id_programa INT NOT NULL IDENTITY(1,1),
+    nome VARCHAR (100) NOT NULL,
+    coordenador VARCHAR (100) NOT NULL,
+    descriçao VARCHAR(200) NOT NULL,
+    data_inicio DATE NOT NULL,
+    data_fim DATE NOT NULL,
+    PRIMARY KEY (id_programa)
+  
+);
+
+CREATE TABLE Cela (
+
+    id_cela INT NOT NULL IDENTITY(1,1) CHECK(id_cela >= 1 AND id_cela <= 100),
+    capacidade INT NOT NULL CHECK(capacidade >= 1 AND capacidade <= 4),
+    localização CHAR(1) NOT NULL,
+    ocupação INT NOT NULL CHECK(ocupação >= 0 AND ocupação <= 4),
+    PRIMARY KEY (id_cela)
+
+);
+
+CREATE TABLE Crime (
+
+    id_crime INT NOT NULL IDENTITY(1,1),
+    nome_crime VARCHAR (15) NOT NULL,
+    Crime_violento BIT NOT NULL,
+    PRIMARY KEY (id_crime)
+   
+ );
+
+CREATE TABLE Recluso (
+
+    id_recluso INT NOT NULL IDENTITY(1,1),
+    codigo_postal INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    nif INT NOT NULL,
+    Pena INT NOT NULL,
+    data_nascimento DATE NOT NULL,
+    data_entrada DATE NOT NULL,
+    data_saida DATE NOT NULL,
+    nacionalidade VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_recluso),
+    FOREIGN KEY (codigo_postal) REFERENCES Morada(codigo_postal)
+
+);
+
+
+
+CREATE TABLE Cela_recluso (
+
+    id_recluso INT NOT NULL ,
+    id_cela INT NOT NULL CHECK(id_cela >= 1 AND id_cela <= 100),
+    PRIMARY KEY (id_cela,id_recluso),
+	FOREIGN KEY (id_recluso) REFERENCES Recluso(id_recluso),
+	FOREIGN KEY (id_cela) REFERENCES Cela(id_cela)
+    
+);
+
+
+
+CREATE TABLE Crime_recluso (
+
+    id_recluso INT NOT NULL,
+    id_crime INT NOT NULL,
+    PRIMARY KEY (id_crime,id_recluso),
+	FOREIGN KEY (id_recluso) REFERENCES Recluso(id_recluso),
+	FOREIGN KEY (id_crime) REFERENCES Crime(id_crime)
+   
+ );
+
+
+
+CREATE TABLE Visita_medica (
+
+    id_recluso INT NOT NULL,
+    id_visita_medica INT NOT NULL,
+    data_consulta DATE NOT NULL,
+    hora_consulta TIME NOT NULL,
+    motivo VARCHAR(30) NOT NULL,
+    diagnostico VARCHAR(30) NOT NULL,
+    prescriçao VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id_visita_medica),
+    FOREIGN KEY (id_recluso) REFERENCES Recluso(id_recluso)
+  
+);
+
+CREATE TABLE Atividade_reabilitaçao (
+
+    id_programa INT NOT NULL,
+    id_atividade INT NOT NULL,
+    id_recluso INT NOT NULL,
+    PRIMARY KEY (id_programa,id_atividade),
+    FOREIGN KEY (id_atividade) REFERENCES Atividade(id_atividade),
+    FOREIGN KEY (id_programa) REFERENCES Programa_de_reabilitaçao(id_programa),
+    FOREIGN KEY (id_recluso) REFERENCES Recluso(id_recluso)
+  
+);
+
+CREATE TABLE Recluso_inscritos (
+
+    id_recluso INT NOT NULL ,
+    id_programa INT NOT NULL,
+    PRIMARY KEY (id_recluso,id_programa),
+	FOREIGN KEY (id_recluso) REFERENCES Recluso(id_recluso),
+	FOREIGN KEY (id_programa) REFERENCES Programa_de_reabilitaçao(id_programa)
+  
+);
+
+
+
+
+

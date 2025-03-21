@@ -1,0 +1,47 @@
+Modelo Relacional
+
+Recluso(id_recluso, codigo_postal -> morada, nome, nif, pena, data_nascimento, data_entrada, data_saida, nacionalidade)
+Cela(id_cela, capacidade, localizacao, ocupacao)
+Cela_Recluso(id_cela -> cela, id_recluso -> recluso )
+Crime(id_crime , nome_crime, crime_violento)
+Crime_Recluso(id_crime -> crime, id_recluso -> recluso)
+Morada(codigo_postal, morada, cidade)
+Visita_Medica(id_visita_medica , id_recluso -> recluso, data_consulta, hora, motivo, diagnostico, prescricao)
+Atividade_Reabilitacao(id_programa -> programa_reabilitacao_, id_atividade -> atividade, id_recluso -> recluso)
+Reclusos_Inscritos(id_recluso -> recluso, id_programa -> programa_reabilitacao)
+Programa_de_Reabilitacao(id_programa, nome, coordenador, descricao, data_inicio, data_fim)
+Atividade(id_atividade, nome, descricao, hora, docente, data_atividade)
+
+Chaves Primárias:
+
+Recluso: id_recluso
+Cela: id_cela
+Cela_Recluso: (id_cela, id_recluso)
+Crime: id_crime
+Crime_Recluso: (id_crime, id_recluso)
+Morada: codigo_postal
+Visita_Medica: id_visita_medica
+Atividade_Reabilitacao: (id_programa, id_atividade)
+Reclusos_Inscritos: (id_recluso, id_programa)
+Programa_de_Reabilitacao: id_programa
+Atividade: id_atividade
+
+Chaves Estrangeiras:
+
+Recluso:
+codigo_postal refere-se a Morada(codigo_postal)
+Cela_Recluso:
+id_cela refere-se a Cela(id_cela)
+id_recluso refere-se a Recluso(id_recluso)
+Crime_Recluso:
+id_crime refere-se a Crime(id_crime)
+id_recluso refere-se a Recluso(id_recluso)
+Visita_Medica:
+id_recluso refere-se a Recluso(id_recluso)
+Atividade_Reabilitacao:
+id_atividade refere-se a Atividade(id_atividade)
+id_programa refere-se a Programa_de_Reabilitacao(id_programa)
+id_recluso refere-se a Recluso(id_recluso)
+Reclusos_Inscritos:
+id_recluso refere-se a Recluso(id_recluso)
+id_programa refere-se a Programa_de_Reabilitacao(id_programa)
